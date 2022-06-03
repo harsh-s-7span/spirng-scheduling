@@ -1,5 +1,6 @@
 package com.learn.springscheduling.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -9,7 +10,7 @@ import javax.persistence.Id;
 import java.time.LocalDate;
 
 @Data
-@Entity
+@Entity(name = "users")
 public class UserEntity {
 
     @Id
@@ -22,5 +23,5 @@ public class UserEntity {
 
     private LocalDate lastLogin;
 
-    private Boolean isActive;
+    private Boolean isActive = true;
 }
