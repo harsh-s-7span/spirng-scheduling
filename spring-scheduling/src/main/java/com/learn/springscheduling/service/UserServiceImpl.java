@@ -3,6 +3,7 @@ package com.learn.springscheduling.service;
 import com.learn.springscheduling.entity.UserEntity;
 import com.learn.springscheduling.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -57,4 +58,32 @@ public class UserServiceImpl implements UserService{
     }
 
 
+    /*
+        This method executes at 12:00 AM every day, and will check all user's last login date
+        If users are not logged in from last 7 days, it will set those users as "In Active (set InActive = false)"
+     */
+
+    @Override
+    @Scheduled(cron = "0 0 0 ? * *")
+    public void setUsersInactive(){
+
+        System.out.println("******** setUsersInactive() ******* START");
+
+        List<UserEntity> userEntityList = userRepo.findByIsActive(true);
+
+        if(userEntityList != null || !userEntityList.isEmpty()){
+            LocalDate currentDate = LocalDate.now();
+
+            for (UserEntity userEntity : userEntityList){
+                if(userEntity.getLastLogin().isBefore(currentDate.minusDays(7))){
+                    System.out.println("User Name : " + userEntity.getName());
+                    System.out.println("Last Login Date : " + userEntity.getLastLogin());
+                    userEntity.setIsActive(false);
+                    userRepo.save(userEntity);
+                }
+            }
+        }
+
+        System.out.println("******** setUsersInactive() ******* END");
+    }
 }

@@ -1,6 +1,7 @@
 package com.learn.springscheduling.service;
 
 import com.learn.springscheduling.entity.UserEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,4 +15,6 @@ public interface UserService {
     public List<UserEntity> getAll();
 
     public UserEntity login(String email);
+
+    public void setUsersInactive();
 }
